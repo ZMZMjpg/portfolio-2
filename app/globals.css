@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #0A0908;
+}
+::-webkit-scrollbar { height: 8px; width: 8px; }
+::-webkit-scrollbar-thumb { background: #2A2721; border-radius: 8px; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+@keyframes ringspin { to { transform: rotate(360deg); } }
+.ring-spin { animation: ringspin 7s linear infinite; }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 34s linear infinite; }
+.marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+
+@keyframes floaty {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, -14px, 0) rotate(2deg); }
+}
+.floaty { animation: floaty 6s ease-in-out infinite; }
+
+@keyframes popin {
+  from { opacity: 0; transform: perspective(800px) rotateX(6deg) translateY(10px); }
+  to { opacity: 1; transform: perspective(800px) rotateX(0) translateY(0); }
+}
+.pop-in { animation: popin .22s cubic-bezier(.16,.84,.44,1) both; }
+
+button, [tabindex], a, input, select, textarea { outline-offset: 2px; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid #D4A03A;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring-spin, .marquee-track, .floaty, .pop-in { animation: none !important; }
+  * { transition: none !important; }
+}
+
+input::placeholder, textarea::placeholder { color: #6B6459; }
+
+/* Video browser: sidebar categories + main preview.
+   Stacked on narrow screens, side-by-side from 860px up. */
+.browser-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.browser-sidebar-list {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  overflow-x: auto;
+}
+@media (min-width: 860px) {
+  .browser-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .browser-sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 20px;
+  }
+  .browser-sidebar-list {
+    flex-direction: column;
+    overflow-x: visible;
+  }
+}

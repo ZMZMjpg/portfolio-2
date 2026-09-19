@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Profile — single doc at site/profile. Public can read, only signed-in admin can write.
+    match /site/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Videos — public can read, only signed-in admin can write.
+    match /videos/{videoId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Testimonials — public can read only approved ones (or everything if admin).
+    // Anyone can submit a new one, but only as an unapproved "viewer" review.
+    // Only the admin can approve, edit, or delete.
+    match /testimonials/{testimonialId} {
+      allow read: if resource.data.approved == true || request.auth != null;
+      allow create: if request.auth != null ||
+        (request.resource.data.approved == false && request.resource.data.source == "viewer");
+      allow update, delete: if request.auth != null;
+    }
+
+    // Messages (offer requests) — anyone can submit one, only admin can read/delete them.
+    match /messages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}
