@@ -671,7 +671,7 @@ function AdminProfile({ profile, user, notify }) {
         </div>
 
         <FieldLabelDark>Stat Numbers Shown On Site</FieldLabelDark>
-        <p style={{ color: C.muted, fontSize: 12, marginTop: -2, marginBottom: 10 }}>Leave any of these blank to auto-calculate from your actual videos and reviews.</p>
+        <p style={{ color: C.muted, fontSize: 12, marginTop: -2, marginBottom: 10 }}>Edits and Reviews auto-calculate from your real data if left blank. Success Rate defaults to 100% if left blank.</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 20 }}>
           <div>
             <FieldLabelDark>Edits</FieldLabelDark>
@@ -684,8 +684,8 @@ function AdminProfile({ profile, user, notify }) {
               onChange={(e) => setForm((f) => ({ ...f, reviewsCount: e.target.value === "" ? null : Number(e.target.value) }))} />
           </div>
           <div>
-            <FieldLabelDark>Formats</FieldLabelDark>
-            <input type="number" style={darkInputStyle} value={form.formatsCount ?? ""} placeholder="Auto"
+            <FieldLabelDark>Success Rate (%)</FieldLabelDark>
+            <input type="number" style={darkInputStyle} value={form.formatsCount ?? ""} placeholder="100"
               onChange={(e) => setForm((f) => ({ ...f, formatsCount: e.target.value === "" ? null : Number(e.target.value) }))} />
           </div>
         </div>

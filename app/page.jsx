@@ -237,7 +237,7 @@ export default function PublicSite() {
           <div className="hero-stats" style={{ display: "flex", gap: 24, transform: "translateZ(10px)" }}>
             <Stat icon={<Film size={16} />} value={profile.editsCount ?? videos.length} label="Edits" />
             <Stat icon={<Star size={16} />} value={profile.reviewsCount ?? approvedTestimonials.length} label="Reviews" />
-            <Stat icon={<Users size={16} />} value={profile.formatsCount ?? new Set(videos.flatMap((v) => [v.category, v.type]).filter(Boolean)).size} label="Formats" />
+            <Stat icon={<Users size={16} />} value={`${profile.formatsCount ?? 100}%`} label="Success Rate" />
           </div>
         </div>
 
