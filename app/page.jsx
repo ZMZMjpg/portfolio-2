@@ -235,9 +235,9 @@ export default function PublicSite() {
           </div>
 
           <div className="hero-stats" style={{ display: "flex", gap: 24, transform: "translateZ(10px)" }}>
-            <Stat icon={<Film size={16} />} value={videos.length} label="Edits" />
-            <Stat icon={<Star size={16} />} value={approvedTestimonials.length} label="Reviews" />
-            <Stat icon={<Users size={16} />} value={new Set(videos.flatMap((v) => [v.category, v.type]).filter(Boolean)).size} label="Formats" />
+            <Stat icon={<Film size={16} />} value={profile.editsCount ?? videos.length} label="Edits" />
+            <Stat icon={<Star size={16} />} value={profile.reviewsCount ?? approvedTestimonials.length} label="Reviews" />
+            <Stat icon={<Users size={16} />} value={profile.formatsCount ?? new Set(videos.flatMap((v) => [v.category, v.type]).filter(Boolean)).size} label="Formats" />
           </div>
         </div>
 
@@ -446,11 +446,16 @@ function VideoModal({ video, onClose }) {
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
       <div onClick={(e) => e.stopPropagation()} className="pop-in" style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 20, maxWidth: 640, width: "100%", maxHeight: "90vh", overflow: "auto" }}>
-        <div style={{ background: "#000", borderRadius: "20px 20px 0 0", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", maxHeight: "75vh" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px 10px 0" }}>
+          <button onClick={onClose} aria-label="Close" style={{ width: 32, height: 32, borderRadius: "50%", background: C.bg, border: `1px solid ${C.border}`, color: C.text, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <X size={16} />
+          </button>
+        </div>
+        <div style={{ background: "#000", borderRadius: 14, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", maxHeight: "70vh", margin: "10px 10px 0" }}>
           <div style={{
             position: "relative", flexShrink: 0,
             aspectRatio: video.orientation === "vertical" ? "9/16" : "16/9",
-            height: video.orientation === "vertical" ? "min(75vh, 640px)" : "auto",
+            height: video.orientation === "vertical" ? "min(70vh, 640px)" : "auto",
             width: video.orientation === "vertical" ? "auto" : "100%",
             maxWidth: "100%",
           }}>
@@ -465,9 +470,6 @@ function VideoModal({ video, onClose }) {
             ) : (
               <div style={{ position: "absolute", inset: 0, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 24, fontSize: 13.5 }}>No video source set for this project yet.</div>
             )}
-            <button onClick={onClose} aria-label="Close" style={{ position: "absolute", top: 10, left: 10, width: 32, height: 32, borderRadius: "50%", background: "rgba(0,0,0,.6)", border: "none", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>
-              <X size={16} />
-            </button>
           </div>
         </div>
         <div style={{ padding: 22 }}>

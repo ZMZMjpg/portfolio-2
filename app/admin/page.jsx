@@ -48,6 +48,7 @@ const defaultProfile = {
   avatar: "",
   available: true,
   instagram: "", linkedin: "", upwork: "", whatsapp: "",
+  editsCount: null, reviewsCount: null, formatsCount: null,
 };
 
 function timeAgo(ts) {
@@ -666,6 +667,26 @@ function AdminProfile({ profile, user, notify }) {
           <div>
             <FieldLabelDark>WhatsApp Link</FieldLabelDark>
             <input style={darkInputStyle} value={form.whatsapp} onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))} placeholder="https://wa.me/1234567890" />
+          </div>
+        </div>
+
+        <FieldLabelDark>Stat Numbers Shown On Site</FieldLabelDark>
+        <p style={{ color: C.muted, fontSize: 12, marginTop: -2, marginBottom: 10 }}>Leave any of these blank to auto-calculate from your actual videos and reviews.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 20 }}>
+          <div>
+            <FieldLabelDark>Edits</FieldLabelDark>
+            <input type="number" style={darkInputStyle} value={form.editsCount ?? ""} placeholder="Auto"
+              onChange={(e) => setForm((f) => ({ ...f, editsCount: e.target.value === "" ? null : Number(e.target.value) }))} />
+          </div>
+          <div>
+            <FieldLabelDark>Reviews</FieldLabelDark>
+            <input type="number" style={darkInputStyle} value={form.reviewsCount ?? ""} placeholder="Auto"
+              onChange={(e) => setForm((f) => ({ ...f, reviewsCount: e.target.value === "" ? null : Number(e.target.value) }))} />
+          </div>
+          <div>
+            <FieldLabelDark>Formats</FieldLabelDark>
+            <input type="number" style={darkInputStyle} value={form.formatsCount ?? ""} placeholder="Auto"
+              onChange={(e) => setForm((f) => ({ ...f, formatsCount: e.target.value === "" ? null : Number(e.target.value) }))} />
           </div>
         </div>
 
