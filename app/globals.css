@@ -50,6 +50,27 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 input::placeholder, textarea::placeholder { color: #6B6459; }
 
+/* Hero stats block (Edits/Reviews/Formats): a left divider on desktop where
+   it sits beside the bio text, but a top divider + centered row once it
+   wraps onto its own line on narrow screens — otherwise it leaves a stray
+   vertical line with nothing to its left. */
+.hero-stats {
+  border-left: 1px solid #2A2721;
+  padding-left: 28px;
+  margin-left: auto;
+}
+@media (max-width: 640px) {
+  .hero-stats {
+    border-left: none;
+    border-top: 1px solid #2A2721;
+    padding-left: 0;
+    padding-top: 18px;
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Video browser: sidebar categories + main preview.
    Stacked on narrow screens, side-by-side from 860px up. */
 .browser-layout {

@@ -214,7 +214,7 @@ export default function PublicSite() {
 
           <div style={{ flex: 1, minWidth: 260, transform: "translateZ(24px)" }}>
             <div style={{ fontSize: 12, letterSpacing: 2, textTransform: "uppercase", color: C.gold, fontWeight: 700, marginBottom: 8 }}>{profile.eyebrow || "Video Editor"}</div>
-            <h1 style={{ margin: 0, fontSize: 36, fontWeight: 800, color: C.text, letterSpacing: -0.5 }}>{profile.name}</h1>
+            <h1 style={{ margin: 0, fontSize: "clamp(24px, 6.5vw, 36px)", fontWeight: 800, color: C.text, letterSpacing: -0.5 }}>{profile.name}</h1>
             <p style={{ marginTop: 10, marginBottom: 18, color: C.textMuted, fontSize: 15.5, lineHeight: 1.6, maxWidth: 480 }}>{profile.bio}</p>
 
             {profile.available && (
@@ -234,7 +234,7 @@ export default function PublicSite() {
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 24, borderLeft: `1px solid ${C.border}`, paddingLeft: 28, marginLeft: "auto", transform: "translateZ(10px)" }}>
+          <div className="hero-stats" style={{ display: "flex", gap: 24, transform: "translateZ(10px)" }}>
             <Stat icon={<Film size={16} />} value={videos.length} label="Edits" />
             <Stat icon={<Star size={16} />} value={approvedTestimonials.length} label="Reviews" />
             <Stat icon={<Users size={16} />} value={new Set(videos.flatMap((v) => [v.category, v.type]).filter(Boolean)).size} label="Formats" />
@@ -307,13 +307,13 @@ function FloatingDots() {
 function VideoBrowser({ videos, onPlay }) {
   const filters = useMemo(() => {
     const set = new Set();
-    videos.forEach((v) => { if (v.type) set.add(v.type); if (v.category) set.add(v.category); });
+    videos.forEach((v) => { if (v.type) set.add(v.type); });
     return ["All Videos", ...Array.from(set)];
   }, [videos]);
 
   const [active, setActive] = useState("All Videos");
   const filtered = useMemo(
-    () => (active === "All Videos" ? videos : videos.filter((v) => v.type === active || v.category === active)),
+    () => (active === "All Videos" ? videos : videos.filter((v) => v.type === active)),
     [videos, active]
   );
   const [index, setIndex] = useState(0);
@@ -446,26 +446,33 @@ function VideoModal({ video, onClose }) {
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.8)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
       <div onClick={(e) => e.stopPropagation()} className="pop-in" style={{ background: C.bgAlt, border: `1px solid ${C.border}`, borderRadius: 20, maxWidth: 640, width: "100%", maxHeight: "90vh", overflow: "auto" }}>
-        <div style={{ position: "relative", background: "#000", borderRadius: "20px 20px 0 0", overflow: "hidden", aspectRatio: video.orientation === "vertical" ? "9/16" : "16/9", maxHeight: "60vh", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {hasUpload ? (
-            <video src={video.videoUrl} controls autoPlay style={{ width: "100%", height: "100%", objectFit: "contain" }} />
-          ) : embed && embed.kind === "iframe" ? (
-            <iframe src={embed.src} title={video.title} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen style={{ width: "100%", height: "100%", border: "none" }} />
-          ) : embed && embed.kind === "link" ? (
-            <a href={embed.src} target="_blank" rel="noopener noreferrer" style={{ color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, textDecoration: "none" }}>
-              <ExternalLink size={22} /> Open video
-            </a>
-          ) : (
-            <div style={{ color: "#fff", textAlign: "center", padding: 24, fontSize: 13.5 }}>No video source set for this project yet.</div>
-          )}
-          <button onClick={onClose} style={{ position: "absolute", top: 10, right: 10, width: 32, height: 32, borderRadius: "50%", background: "rgba(0,0,0,.5)", border: "none", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <X size={16} />
-          </button>
+        <div style={{ background: "#000", borderRadius: "20px 20px 0 0", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", maxHeight: "75vh" }}>
+          <div style={{
+            position: "relative", flexShrink: 0,
+            aspectRatio: video.orientation === "vertical" ? "9/16" : "16/9",
+            height: video.orientation === "vertical" ? "min(75vh, 640px)" : "auto",
+            width: video.orientation === "vertical" ? "auto" : "100%",
+            maxWidth: "100%",
+          }}>
+            {hasUpload ? (
+              <video src={video.videoUrl} controls autoPlay style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+            ) : embed && embed.kind === "iframe" ? (
+              <iframe src={embed.src} title={video.title} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen style={{ width: "100%", height: "100%", border: "none", display: "block" }} />
+            ) : embed && embed.kind === "link" ? (
+              <a href={embed.src} target="_blank" rel="noopener noreferrer" style={{ position: "absolute", inset: 0, color: "#fff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, textDecoration: "none" }}>
+                <ExternalLink size={22} /> Open video
+              </a>
+            ) : (
+              <div style={{ position: "absolute", inset: 0, color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", padding: 24, fontSize: 13.5 }}>No video source set for this project yet.</div>
+            )}
+            <button onClick={onClose} aria-label="Close" style={{ position: "absolute", top: 10, left: 10, width: 32, height: 32, borderRadius: "50%", background: "rgba(0,0,0,.6)", border: "none", color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>
+              <X size={16} />
+            </button>
+          </div>
         </div>
         <div style={{ padding: 22 }}>
-          <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+          <div style={{ marginBottom: 8 }}>
             <span style={{ fontSize: 11, fontWeight: 700, color: C.gold, background: C.goldDim, padding: "3px 9px", borderRadius: 999 }}>{video.type}</span>
-            <span style={{ fontSize: 11, fontWeight: 700, color: C.textMuted, background: C.bg, padding: "3px 9px", borderRadius: 999 }}>{video.category}</span>
           </div>
           <h3 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 800, color: C.text }}>{video.title}</h3>
           <p style={{ margin: 0, color: C.textMuted, fontSize: 14.5, lineHeight: 1.6 }}>{video.description}</p>
